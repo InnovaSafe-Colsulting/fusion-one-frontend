@@ -1,0 +1,38 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <img src="images/fusionOneIcon-Photoroom.png" alt="FusionOne" class="auth-card__logo" />
+    <h2 class="auth-card__title">Ingresa el código</h2>
+    <p class="auth-card__subtitle">Revisa tu correo e ingresa el código de 6 dígitos</p>
+
+    <div class="otp-container">
+      @for (digit of digits(); track $index) {
+        <input
+          class="otp-input"
+          type="text"
+          inputmode="numeric"
+          maxlength="1"
+          [value]="digit"
+          [class.otp-input--filled]="digit"
+          (input)="onInput($index, $event)"
+          (keydown)="onKeydown($index, $event)"
+          (blur)="onBlur()"
+        />
+      }
+    </div>
+
+    @if (verifying()) {
+      <p class="auth-card__status">Verificando...</p>
+    }
+  </div>
+
+  <!-- Modal éxito -->
+  @if (verified()) {
+    <div class="modal-backdrop">
+      <div class="success-modal">
+        <span class="success-modal__icon">✔</span>
+        <h3 class="success-modal__title">¡Verificación exitosa!</h3>
+        <p class="success-modal__message">Tu identidad ha sido confirmada correctamente.</p>
+      </div>
+    </div>
+  }
+</div>

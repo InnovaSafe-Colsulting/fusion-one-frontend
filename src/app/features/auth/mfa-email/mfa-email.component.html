@@ -1,0 +1,29 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <img src="images/fusionOneIcon-Photoroom.png" alt="FusionOne" class="auth-card__logo" />
+    <h2 class="auth-card__title">Verificación en dos pasos</h2>
+    <p class="auth-card__subtitle">Ingresa tu correo para recibir el código de verificación</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-card__form" novalidate>
+      <div class="form-group" [class.form-group--error]="email?.invalid && email?.touched">
+        <div class="input-wrapper">
+          <span class="input-wrapper__icon">✉</span>
+          <input
+            class="input-field"
+            type="email"
+            formControlName="email"
+            placeholder="Correo electrónico"
+            autocomplete="email"
+          />
+        </div>
+        @if (email?.invalid && email?.touched) {
+          <span class="form-group__error">Ingresa un correo válido</span>
+        }
+      </div>
+
+      <button type="submit" class="btn btn-primary auth-card__submit" [disabled]="loading()">
+        @if (loading()) { Enviando... } @else { ENVIAR CÓDIGO → }
+      </button>
+    </form>
+  </div>
+</div>

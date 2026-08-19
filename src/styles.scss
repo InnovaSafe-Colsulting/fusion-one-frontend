@@ -1,1 +1,58 @@
-/* You can add global styles to this file, and also import other style files */
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    background-color: $color-bg-base;
+    color: $color-text-primary;
+    font-family: $font-family-base;
+    font-size: $font-size-base;
+    -webkit-font-smoothing: antialiased;
+}
+
+// Personalize Scroolbar
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: $color-bg-base; }
+::-webkit-scrollbar-thumb { background: $color-border; border-radius: $radius-full; }
+
+// Buttons utilitaries classes
+.btn { @include button-base; 
+    &-primary {
+        background: $color-primary;
+        color: #000;
+        &:hover:not(:disabled) {
+            background: $color-primary-hover;
+        }
+    }
+    &-secondary {
+        background: $color-secondary;
+        color: $color-text-primary;
+        &:hover:not(:disabled) {
+            background: $color-secondary-hover;
+        }
+    }
+    &-ghost {
+        background: transparent;
+        border: 1px solid $color-border;
+        color: $color-text-primary;
+        &:hover:not(:disabled) {
+            border-color: $color-primary;
+            color: $color-primary;
+        }
+    }
+    &-danger {
+        background: $color-error;
+        color: $color-text-primary
+    }
+}
+
+// Input Global
+.input-field {
+    @include input-base;
+}

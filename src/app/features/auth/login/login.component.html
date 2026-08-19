@@ -1,0 +1,74 @@
+<div class="login-page">
+
+  <!-- Left panel -->
+  <div class="login-page__hero"></div>
+
+  <!-- Right panel -->
+  <div class="login-page__card">
+    <div class="login-card">
+
+      <img src="images/fusionOneIcon-Photoroom.png" alt="FusionOne" class="login-card__logo" />
+
+      <h2 class="login-card__title">Bienvenido de nuevo</h2>
+      <p class="login-card__subtitle">Inicia sesión para continuar</p>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-card__form" novalidate>
+
+        <!-- Email -->
+        <div class="form-group" [class.form-group--error]="email?.invalid && email?.touched">
+          <div class="input-wrapper">
+            <span class="input-wrapper__icon">✉</span>
+            <input
+              class="input-field"
+              type="email"
+              formControlName="email"
+              placeholder="Correo electrónico"
+              autocomplete="email"
+            />
+          </div>
+          @if (email?.invalid && email?.touched) {
+            <span class="form-group__error">Ingresa un correo válido</span>
+          }
+        </div>
+
+        <!-- Password -->
+        <div class="form-group" [class.form-group--error]="password?.invalid && password?.touched">
+          <div class="input-wrapper">
+            <span class="input-wrapper__icon">🔒</span>
+            <input
+              class="input-field"
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Contraseña"
+              autocomplete="current-password"
+            />
+            <button type="button" class="input-wrapper__toggle" (click)="showPassword.set(!showPassword())">
+              {{ showPassword() ? '🙈' : '👁' }}
+            </button>
+          </div>
+          @if (password?.invalid && password?.touched) {
+            <span class="form-group__error">Mínimo 6 caracteres</span>
+          }
+        </div>
+
+        <!-- Remember + Forgot -->
+        <div class="login-card__options">
+          <label class="checkbox">
+            <input type="checkbox" formControlName="remember" />
+            <span>Recordarme</span>
+          </label>
+          <a routerLink="/auth/forgot-password" class="login-card__forgot">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn btn-primary login-card__submit" [disabled]="loading()">
+          @if (loading()) { Cargando... } @else { INICIAR SESIÓN → }
+        </button>
+
+      </form>
+
+
+    </div>
+  </div>
+
+</div>

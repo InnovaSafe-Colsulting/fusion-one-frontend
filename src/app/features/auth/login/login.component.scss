@@ -1,0 +1,193 @@
+@use '../../../../../styles/variables' as *;
+@use '../../../../../styles/mixins' as *;
+
+.login-page {
+  display: grid;
+  grid-template-columns: 1fr 480px;
+  min-height: 100vh;
+  background-color: $color-bg-base;
+
+  @include respond-to('lg') {
+    grid-template-columns: 1fr;
+  }
+
+  // Hero
+  &__hero {
+    background-image: url('/images/LoginImage.png');
+    background-size: 102% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    @include respond-to('lg') { display: none; }
+  }
+
+  // Card panel
+  &__card {
+    @include flex-center;
+    padding: $spacing-xl;
+    background: $color-bg-base;
+
+    @include respond-to('md') {
+      padding: $spacing-lg;
+    }
+
+    @include respond-to('sm') {
+      padding: $spacing-md;
+      align-items: flex-start;
+      padding-top: $spacing-2xl;
+    }
+  }
+}
+
+
+
+// Login card
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-sm;
+
+  @include respond-to('sm') {
+    max-width: 100%;
+  }
+
+  &__logo {
+    width: calc(100% - 4cm);
+    height: auto;
+    object-fit: contain;
+
+    @include respond-to('sm') {
+      width: 100px;
+    }
+  }
+
+  &__title {
+    font-size: $font-size-xl;
+    font-weight: 700;
+    color: $color-text-primary;
+    text-align: center;
+  }
+
+  &__subtitle {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+    margin-top: -$spacing-sm;
+  }
+
+  &__form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  &__options {
+    @include flex-between;
+    font-size: $font-size-sm;
+  }
+
+  &__forgot {
+    color: $color-primary;
+    text-decoration: none;
+    font-size: $font-size-sm;
+    &:hover { text-decoration: underline; }
+  }
+
+  &__submit {
+    width: 100%;
+    padding: $spacing-md;
+    font-size: $font-size-base;
+    letter-spacing: 0.05em;
+    border-radius: $radius-md;
+  }
+
+  &__register {
+    text-align: center;
+    color: $color-text-secondary;
+    font-size: $font-size-sm;
+    line-height: 1.6;
+  }
+
+  &__security {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    color: $color-text-muted;
+    font-size: $font-size-sm;
+    text-align: center;
+  }
+}
+
+// Form group
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  &--error .input-wrapper {
+    border-color: $color-error;
+  }
+
+  &__error {
+    font-size: $font-size-sm;
+    color: $color-error;
+  }
+}
+
+// Input wrapper con icono
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  background: $color-bg-overlay;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  transition: border-color $transition-fast;
+
+  &:focus-within { border-color: $color-border-focus; }
+
+  &__icon {
+    padding: 0 $spacing-sm 0 $spacing-md;
+    color: $color-text-muted;
+    font-size: $font-size-base;
+    flex-shrink: 0;
+  }
+
+  &__toggle {
+    background: none;
+    border: none;
+    padding: 0 $spacing-md;
+    cursor: pointer;
+    color: $color-text-muted;
+    font-size: $font-size-base;
+    flex-shrink: 0;
+    &:hover { color: $color-text-primary; }
+  }
+
+  .input-field {
+    border: none;
+    background: transparent;
+    flex: 1;
+    padding: $spacing-sm 0;
+    &:focus { outline: none; }
+  }
+}
+
+// Checkbox
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  cursor: pointer;
+  color: $color-text-secondary;
+  font-size: $font-size-sm;
+
+  input[type='checkbox'] {
+    accent-color: $color-primary;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+}

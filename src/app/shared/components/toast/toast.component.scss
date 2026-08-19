@@ -1,0 +1,59 @@
+@use '../../../../../styles/variables' as *;
+
+.toast-container {
+  position: fixed;
+  bottom: $spacing-lg;
+  right: $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  z-index: $z-toast;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-md;
+  border-left: 4px solid;
+  background: $color-bg-surface;
+  box-shadow: $shadow-md;
+  min-width: 280px;
+  max-width: 400px;
+  animation: slideIn $transition-base;
+
+  &--success { border-color: $color-success; .toast__icon { color: $color-success; } }
+  &--error   { border-color: $color-error;   .toast__icon { color: $color-error; } }
+  &--warning { border-color: $color-warning; .toast__icon { color: $color-warning; } }
+  &--info    { border-color: $color-info;    .toast__icon { color: $color-info; } }
+
+  &__icon {
+    font-size: $font-size-md;
+    flex-shrink: 0;
+  }
+
+  &__message {
+    flex: 1;
+    font-size: $font-size-base;
+    color: $color-text-primary;
+  }
+
+  &__close {
+    background: none;
+    border: none;
+    color: $color-text-muted;
+    cursor: pointer;
+    font-size: $font-size-sm;
+    padding: 0;
+    flex-shrink: 0;
+    transition: color $transition-fast;
+
+    &:hover { color: $color-text-primary; }
+  }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}

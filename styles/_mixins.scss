@@ -1,0 +1,75 @@
+@use 'variables' as *;
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@mixin input-base {
+    width: 100%;
+    padding: $spacing-sm $spacing-md;
+    background: $color-bg-overlay;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    color: $color-text-primary;
+    font-size: $font-size-base;
+    transition: border-color $transition-fast;
+
+    &:focus {
+        outline: none;
+        border-color: $color-border-focus;
+    }
+    &::placeholder {
+        color: $color-text-muted;
+    }
+}
+
+@mixin button-base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    padding: $spacing-sm $spacing-lg;
+    border: none;
+    border-radius: $radius-md;
+    font-size: $font-size-base;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background $transition-fast, transform $transition-fast;
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+@mixin card {
+    background: $color-bg-surface;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    padding: $spacing-lg;
+    box-shadow: $shadow-md;
+}
+
+@mixin truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@mixin respond-to($breakpoint) {
+    @if $breakpoint == 'sm' {
+        @media (max-width: 576px) {
+            @content; }}
+    @else if $breakpoint == 'md' { @media (max-width: 768px) {@content; } }
+    @else if $breakpoint == 'lg' { @media (max-width: 1024px) {@content; } }
+    @else if $breakpoint == 'xl' { @media (max-width: 1268px) {@content; } }
+}
+
