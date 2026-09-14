@@ -57,7 +57,7 @@
             <input type="checkbox" formControlName="remember" />
             <span>Recordarme</span>
           </label>
-          <a routerLink="/auth/forgot-password" class="login-card__forgot">¿Olvidaste tu contraseña?</a>
+          <a class="login-card__forgot" (click)="authModal.open('forgot-password')">¿Olvidaste tu contraseña?</a>
         </div>
 
         <!-- Submit -->
@@ -72,3 +72,5 @@
   </div>
 
 </div>
+
+<app-auth-modal />

@@ -1,0 +1,188 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.company-page {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+
+  &__header {
+    @include flex-between;
+    flex-wrap: wrap;
+    gap: $spacing-md;
+  }
+
+  &__title {
+    font-size: $font-size-xl;
+    font-weight: 700;
+    color: $color-text-primary;
+  }
+
+  &__subtitle {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin-top: 2px;
+  }
+}
+
+.btn-back {
+  background: transparent;
+  border: 1px solid $color-primary;
+  color: $color-primary;
+  padding: $spacing-sm $spacing-lg;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background $transition-fast, color $transition-fast;
+
+  &:hover {
+    background: $color-primary;
+    color: #000;
+  }
+}
+
+.company-layout {
+  display: grid;
+  gap: $spacing-lg;
+  align-items: start;
+
+  &--single {
+    grid-template-columns: minmax(0, 560px);
+  }
+}
+
+.company-card {
+  @include card;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  animation: fadeInUp 0.4s ease both;
+
+  &__section-title {
+    font-size: $font-size-md;
+    font-weight: 600;
+    color: $color-primary;
+    border-bottom: 1px solid rgba($color-primary, 0.2);
+    padding-bottom: $spacing-sm;
+  }
+}
+
+.company-fields {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: fadeInUp 0.4s ease both;
+
+  @for $i from 1 through 5 {
+    &:nth-child(#{$i}) { animation-delay: #{$i * 0.05}s; }
+  }
+
+  &__label {
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+    font-weight: 500;
+  }
+
+  &__input {
+    background: $color-bg-overlay;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    padding: $spacing-sm $spacing-md;
+    color: $color-text-primary;
+    font-size: $font-size-base;
+    transition: border-color $transition-fast, box-shadow $transition-fast;
+    cursor: default;
+
+    &:hover {
+      border-color: rgba($color-primary, 0.4);
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.06);
+    }
+  }
+}
+
+.fiscal-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: $spacing-sm;
+}
+
+.btn-accept {
+  background: $color-primary;
+  border: none;
+  color: #000;
+  padding: $spacing-sm $spacing-xl;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity $transition-fast;
+
+  &:hover { opacity: 0.85; }
+}
+
+// Loading
+.company-loading {
+  @include flex-center;
+  flex-direction: column;
+  gap: $spacing-md;
+  padding: $spacing-2xl;
+  color: $color-text-muted;
+
+  &__spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba($color-primary, 0.2);
+    border-top-color: $color-primary;
+    border-radius: $radius-full;
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+// Modal sin datos
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  @include flex-center;
+  z-index: 1000;
+}
+
+.modal-box {
+  @include card;
+  @include flex-center;
+  flex-direction: column;
+  gap: $spacing-md;
+  max-width: 360px;
+  width: 90%;
+  text-align: center;
+  animation: fadeInUp 0.3s ease both;
+
+  &__icon { font-size: 2.5rem; }
+
+  &__title {
+    font-size: $font-size-lg;
+    font-weight: 700;
+    color: $color-text-primary;
+  }
+
+  &__message {
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+  }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

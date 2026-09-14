@@ -1,0 +1,100 @@
+// Mapa estático slug → ruta mientras el backend no devuelve rutas
+export const SLUG_ROUTE_MAP: Record<string, string> = {
+  // Nivel 1
+  'dashboard':          '/dashboard',
+  'admin':              '/administration',
+  'products':           '/products',
+  'inventory':          '/inventory',
+  'sales':              '/sales',
+  'kitchen':            '/kitchen',
+  'cash':               '/cash',
+  'purchases':          '/purchases',
+  'customers':          '/customers',
+  'employees':          '/employees',
+  'music':              '/music',
+  'reports':            '/reports',
+  'reservations':       '/reservations',
+  'delivery':           '/delivery',
+  'configuration':      '/configuration/settings',
+  // Administración
+  'company':            '/administration/company',
+  'users':              '/administration/users',
+  'roles':              '/administration/roles',
+  'branches':           '/administration/branches',
+  'permissions':        '/administration/permissions',
+  'taxes':              '/administration/taxes',
+  'currencies':         '/administration/currencies',
+  'payment-methods':    '/administration/payment-methods',
+  'numbering':          '/administration/numbering',
+  'pos-settings':       '/administration/pos-settings',
+  'modules':            '/administration/modules',
+  // Productos
+  'categories':         '/products/categories',
+  'product-types':      '/products/product-types',
+  'variants':           '/products/variants',
+  'modifiers':          '/products/modifiers',
+  'combos':             '/products/combos',
+  'promotions':         '/products/promotions',
+  'price-lists':        '/products/price-lists',
+  'recipes':            '/products/recipes',
+  'ingredients':        '/products/ingredients',
+  // Inventario
+  'stock':              '/inventory/stock',
+  'lots':               '/inventory/lots',
+  'warehouses':         '/inventory/warehouses',
+  'warehouse-types':    '/inventory/warehouse-types',
+  'adjustments':        '/inventory/adjustments',
+  'transfers':          '/inventory/transfers',
+  // Ventas
+  'pos':                '/sales/pos',
+  'orders':             '/sales/orders',
+  'invoices':           '/sales/invoices',
+  'payments':           '/sales/payments',
+  'tables':             '/sales/tables',
+  // Caja
+  'registers':          '/cash/registers',
+  'sessions':           '/cash/sessions',
+  'movements':          '/cash/movements',
+  // Compras
+  'purchase-orders':    '/purchases/orders',
+  'receipts':           '/purchases/receipts',
+  'suppliers':          '/purchases/suppliers',
+  'purchase-returns':   '/purchases/returns',
+  // Clientes
+  'customers-list':     '/customers/customers',
+  'loyalty':            '/customers/loyalty',
+  'gift-cards':         '/customers/gift-cards',
+  'history':            '/customers/history',
+  // Personal
+  'employees-list':     '/employees/employees',
+  'positions':          '/employees/positions',
+  'schedules':          '/employees/schedules',
+  'shifts':             '/employees/shifts',
+  // Reportes
+  'reports-sales':      '/reports/sales',
+  'reports-inventory':  '/reports/inventory',
+  // Empresa (nivel 3)
+  'general-information':'/administration/company/general',
+  'fiscal-data':        '/administration/fiscal-data',
+  // Configuración
+  'settings':           '/configuration/settings',
+};
+
+// Mapa estático slug → icono emoji
+export const SLUG_ICON_MAP: Record<string, string> = {
+  'dashboard':     '🏠',
+  'admin':         '⚙️',
+  'products':      '🍔',
+  'inventory':     '📦',
+  'sales':         '🛒',
+  'kitchen':       '👨‍🍳',
+  'cash':          '💰',
+  'purchases':     '🛍️',
+  'customers':     '👥',
+  'employees':     '👤',
+  'music':         '🎵',
+  'reports':       '📊',
+  'reservations':  '📅',
+  'delivery':      '🚚',
+  'configuration': '🔧',
+};

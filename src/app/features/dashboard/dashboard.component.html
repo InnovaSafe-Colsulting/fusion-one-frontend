@@ -1,0 +1,311 @@
+<div class="dashboard">
+
+  <!-- Métricas -->
+  <div class="metrics">
+    <!-- Ventas del día: datos reales -->
+    <div class="metric-card">
+      <p class="metric-card__label">Ventas del día</p>
+      <h2 class="metric-card__value">COP ${{ salesSummary().today_sales | number:'1.0-0' }}</h2>
+      <span class="metric-card__trend" [class.metric-card__trend--up]="salesSummary().trend === 'up'" [class.metric-card__trend--down]="salesSummary().trend === 'down'">{{ trendLabel }}</span>
+      <p class="metric-card__sub">vs. ayer</p>
+    </div>
+    <!-- Resto de métricas: datos mock -->
+    <!-- Caja actual: datos reales -->
+    <div class="metric-card">
+      <p class="metric-card__label">Caja actual</p>
+      <h2 class="metric-card__value">COP ${{ cashAmount | number:'1.0-0' }}</h2>
+      <p class="metric-card__sub">{{ cashSummary()?.cash_register ?? 'Sin sesión abierta' }}</p>
+    </div>
+    <!-- Mesas ocupadas: datos reales -->
+    <div class="metric-card">
+      <p class="metric-card__label">Mesas ocupadas</p>
+      <h2 class="metric-card__value">{{ tablesLabel }}</h2>
+      <p class="metric-card__sub">{{ occupancyPct }}% ocupación</p>
+    </div>
+    <!-- Pedidos en cocina: datos reales -->
+    <div class="metric-card">
+      <p class="metric-card__label">Pedidos en cocina</p>
+      <h2 class="metric-card__value">{{ kitchenSummary().total }}</h2>
+      <div class="metric-card__kitchen-status">
+        @for (s of kitchenSummary().by_status; track s.status) {
+          <span class="kitchen-status-item">{{ s.status }}: {{ s.count }}</span>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Fila media -->
+  <div class="mid-row">
+
+    <!-- Ventas por hora -->
+    <div class="card chart-card">
+      <div class="card__header">
+        <h3 class="card__title">Ventas por hora</h3>
+        <select class="card__select" [ngModel]="selectedDate()" (ngModelChange)="onDateChange($event)">
+          @for (day of daysOfMonth(); track day.value) {
+            <option [value]="day.value">{{ day.label }}</option>
+          }
+        </select>
+      </div>
+      <apx-chart
+        [series]="chartOptions().series"
+        [chart]="chartOptions().chart"
+        [colors]="chartOptions().colors"
+        [plotOptions]="chartOptions().plotOptions"
+        [dataLabels]="chartOptions().dataLabels"
+        [xaxis]="chartOptions().xaxis"
+        [yaxis]="chartOptions().yaxis"
+        [tooltip]="chartOptions().tooltip"
+        [grid]="chartOptions().grid"
+      />
+    </div>
+
+    <!-- Productos más vendidos -->
+    <div class="card">
+      <div class="card__header">
+        <h3 class="card__title">Productos más vendidos</h3>
+      </div>
+      @if (topProducts().length === 0) {
+        <p class="empty-state">No hay productos vendidos</p>
+      } @else {
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Producto</th>
+              <th>Cant.</th>
+              <th>Ventas</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (p of topProducts(); track p.product_id; let i = $index) {
+              <tr>
+                <td>{{ i + 1 }}</td>
+                <td>{{ p.product }}</td>
+                <td>{{ p.quantity }}</td>
+                <td>COP ${{ p.total_sales | number:'1.0-0' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+
+    <!-- Alertas -->
+    <div class="card alerts-card">
+      <div class="card__header">
+        <h3 class="card__title">Alertas</h3>
+      </div>
+      <div class="alerts-list">
+        @for (a of alertsPreview(); track a.type) {
+          <div class="alert-item">
+            <span class="alert-item__icon alert-item__icon--{{ getAlertColor(a.severity) }}">{{ getAlertIcon(a.severity) }}</span>
+            <div>
+              <p class="alert-item__title">{{ a.label }}</p>
+              <p class="alert-item__desc">Ver detalles del sistema</p>
+              <a class="alert-item__link">Ver detalles</a>
+            </div>
+          </div>
+        }
+        <a class="alerts-card__all" (click)="openAlerts()">Ver todas las alertas</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Fila inferior -->
+  <div class="bottom-row">
+
+    <!-- Inventario crítico -->
+    <div class="card">
+      <div class="card__header">
+        <h3 class="card__title">Inventario crítico</h3>
+        <a class="card__link" (click)="openInventory()">Ver todo</a>
+      </div>
+      @if (criticalInventoryPreview().length === 0) {
+        <p class="empty-state">No hay productos en estado crítico</p>
+      } @else {
+        <div class="inventory-list">
+          @for (item of criticalInventoryPreview(); track item.product_id) {
+            <div class="inventory-item">
+              <div class="inventory-item__info">
+                <p class="inventory-item__name">{{ item.product }}</p>
+                <p class="inventory-item__detail">Stock: {{ item.quantity }} &nbsp; Mínimo: {{ item.min_stock }} &nbsp; {{ item.warehouse }}</p>
+              </div>
+              <span class="badge" [class.badge--danger]="item.is_critical" [class.badge--warning]="!item.is_critical">
+                {{ item.is_critical ? 'Crítico' : 'En límite' }}
+              </span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Pedidos en cocina -->
+    <div class="card">
+      <div class="card__header">
+        <h3 class="card__title">Pedidos en cocina</h3>
+        <a class="card__link">Ver todos</a>
+      </div>
+      @if (kitchenOrders().length === 0) {
+        <p class="empty-state">No hay órdenes en cocina</p>
+      } @else {
+        <table class="data-table">
+          <thead>
+            <tr><th>Orden</th><th>Mesa</th><th>Items</th><th>Tiempo</th><th>Estado</th></tr>
+          </thead>
+          <tbody>
+            @for (o of kitchenOrders(); track o.kitchen_order_id) {
+              <tr class="clickable-row" (click)="openOrder(o)">
+                <td>#{{ o.order_number }}</td>
+                <td>{{ o.table }}</td>
+                <td class="items-cell">{{ formatItems(o) }}</td>
+                <td>{{ o.elapsed_minutes }} min</td>
+                <td>
+                  <span class="badge"
+                    [class.badge--warning]="o.status === 'En preparación' || o.status === 'Pendiente'"
+                    [class.badge--success]="o.status === 'Listo'"
+                    [class.badge--danger]="o.status === 'Entregado'">
+                    {{ o.status }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+
+    <!-- Actividad reciente -->
+    <div class="card">
+      <div class="card__header">
+        <h3 class="card__title">Actividad reciente</h3>
+        <a class="card__link">Ver todo</a>
+      </div>
+      @if (recentActivity().length === 0) {
+        <p class="empty-state">No hay actividad reciente</p>
+      } @else {
+        <div class="activity-list">
+          @for (a of recentActivity(); track a.id) {
+            <div class="activity-item">
+              <span class="activity-item__icon">{{ getActivityIcon(a.action) }}</span>
+              <div class="activity-item__info">
+                <p class="activity-item__title">{{ getActivityTitle(a) }}</p>
+                <p class="activity-item__desc">{{ a.user }}</p>
+              </div>
+              <span class="activity-item__time">{{ a.elapsed }}</span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+  </div>
+
+  <!-- Config bar -->
+  <div class="card config-bar">
+    <div class="config-bar__header">
+      <span class="config-bar__icon">⚙</span>
+      <div>
+        <p class="config-bar__title">Configuración del sistema</p>
+        <p class="config-bar__desc">Personaliza y controla todos los módulos, permisos, parámetros y opciones de FusionOne desde un solo lugar.</p>
+      </div>
+    </div>
+    <div class="config-bar__tabs">
+      @for (tab of configTabs; track tab) {
+        <button class="config-tab">{{ tab }}</button>
+      }
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal inventario crítico completo -->
+@if (showAllInventory()) {
+  <div class="order-modal-backdrop" (click)="closeInventory()">
+    <div class="order-modal order-modal--wide" (click)="$event.stopPropagation()">
+      <div class="order-modal__header">
+        <h3 class="order-modal__title">Inventario crítico completo</h3>
+        <button class="order-modal__close" (click)="closeInventory()">&#x2715;</button>
+      </div>
+      @if (criticalInventory().length === 0) {
+        <p class="empty-state">No hay productos en estado crítico</p>
+      } @else {
+        <div class="inventory-list">
+          @for (item of criticalInventory(); track item.product_id) {
+            <div class="inventory-item">
+              <div class="inventory-item__info">
+                <p class="inventory-item__name">{{ item.product }}</p>
+                <p class="inventory-item__detail">Stock: {{ item.quantity }} &nbsp; Mínimo: {{ item.min_stock }} &nbsp; {{ item.warehouse }}</p>
+              </div>
+              <span class="badge" [class.badge--danger]="item.is_critical" [class.badge--warning]="!item.is_critical">
+                {{ item.is_critical ? 'Crítico' : 'En límite' }}
+              </span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+}
+
+<!-- Modal todas las alertas -->
+@if (showAllAlerts()) {
+  <div class="order-modal-backdrop" (click)="closeAlerts()">
+    <div class="order-modal" (click)="$event.stopPropagation()">
+      <div class="order-modal__header">
+        <h3 class="order-modal__title">Todas las alertas</h3>
+        <button class="order-modal__close" (click)="closeAlerts()">&#x2715;</button>
+      </div>
+      <div class="order-modal__items">
+        @for (a of alertTypes(); track a.type) {
+          <div class="order-modal__item">
+            <span class="alert-item__icon alert-item__icon--{{ getAlertColor(a.severity) }}">{{ getAlertIcon(a.severity) }}</span>
+            <div class="order-modal__item-info">
+              <span class="order-modal__item-name">{{ a.label }}</span>
+              <span class="order-modal__item-notes">{{ a.severity }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Modal detalle pedido -->
+@if (selectedOrder()) {
+  <div class="order-modal-backdrop" (click)="closeOrder()">
+    <div class="order-modal" (click)="$event.stopPropagation()">
+      <div class="order-modal__header">
+        <div>
+          <h3 class="order-modal__title">Pedido #{{ selectedOrder()!.order_number }}</h3>
+          <p class="order-modal__sub">{{ selectedOrder()!.table }}</p>
+        </div>
+        <button class="order-modal__close" (click)="closeOrder()">✕</button>
+      </div>
+      <div class="order-modal__meta">
+        <span class="badge"
+          [class.badge--warning]="selectedOrder()!.status === 'En preparación' || selectedOrder()!.status === 'Pendiente'"
+          [class.badge--success]="selectedOrder()!.status === 'Listo'"
+          [class.badge--danger]="selectedOrder()!.status === 'Entregado'">
+          {{ selectedOrder()!.status }}
+        </span>
+        <span class="order-modal__time">⏱ {{ selectedOrder()!.elapsed_minutes }} min transcurridos</span>
+      </div>
+      <div class="order-modal__items">
+        <p class="order-modal__items-title">Items del pedido</p>
+        @for (item of selectedOrder()!.items; track item.product) {
+          <div class="order-modal__item">
+            <span class="order-modal__item-qty">{{ item.quantity }}x</span>
+            <div class="order-modal__item-info">
+              <span class="order-modal__item-name">{{ item.product }}</span>
+              @if (item.notes) {
+                <span class="order-modal__item-notes">{{ item.notes }}</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}

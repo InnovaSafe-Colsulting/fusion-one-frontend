@@ -16,10 +16,17 @@
   align-items: center;
   gap: $spacing-md;
 
+  @include respond-to('sm') {
+    max-width: 100%;
+    gap: $spacing-sm;
+  }
+
   &__logo {
     width: calc(100% - 4cm);
     height: auto;
     object-fit: contain;
+
+    @include respond-to('sm') { width: 100px; }
   }
 
   &__title {
@@ -27,6 +34,8 @@
     font-weight: 700;
     color: $color-text-primary;
     text-align: center;
+
+    @include respond-to('sm') { font-size: $font-size-lg; }
   }
 
   &__subtitle {
@@ -34,6 +43,8 @@
     color: $color-text-secondary;
     text-align: center;
     margin-top: -$spacing-sm;
+
+    @include respond-to('sm') { font-size: $font-size-sm; }
   }
 
   &__form {
@@ -48,6 +59,7 @@
     padding: $spacing-md;
     font-size: $font-size-base;
     letter-spacing: 0.05em;
+    border-radius: $radius-md;
   }
 }
 
@@ -56,14 +68,8 @@
   flex-direction: column;
   gap: $spacing-xs;
 
-  &--error .input-wrapper {
-    border-color: $color-error;
-  }
-
-  &__error {
-    font-size: $font-size-sm;
-    color: $color-error;
-  }
+  &--error .input-wrapper { border-color: $color-error; }
+  &__error { font-size: $font-size-sm; color: $color-error; }
 }
 
 .input-wrapper {
@@ -88,6 +94,10 @@
     background: transparent;
     flex: 1;
     padding: $spacing-sm 0;
+    color: $color-text-primary;
+    font-size: $font-size-base;
+
     &:focus { outline: none; }
+    &::placeholder { color: $color-text-muted; }
   }
 }

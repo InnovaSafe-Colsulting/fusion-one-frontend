@@ -1,0 +1,185 @@
+<div class="settings-page">
+
+  <div class="settings-page__header">
+    <h1 class="settings-page__title">Configuración</h1>
+    <p class="settings-page__subtitle">Gestiona la información de tu empresa</p>
+  </div>
+
+  @if (loading()) {
+    <div class="settings-loading">
+      <span class="settings-loading__spinner"></span>
+      <p>Cargando...</p>
+    </div>
+  } @else {
+
+    <!-- Tabs -->
+    <div class="settings-tabs">
+      <button class="settings-tab" [class.settings-tab--active]="activeTab() === 'general'" (click)="setTab('general')">
+        Información General
+      </button>
+      <button class="settings-tab" [class.settings-tab--active]="activeTab() === 'fiscal'" (click)="setTab('fiscal')">
+        Información Fiscal
+      </button>
+    </div>
+
+    <!-- TAB GENERAL -->
+    @if (activeTab() === 'general') {
+      <div class="settings-content">
+
+        <!-- Logo -->
+        <div class="settings-card">
+          <h2 class="settings-card__title">Logo de la empresa</h2>
+          <div class="logo-section">
+            <div class="logo-preview">
+              @if (logoPreview()) {
+                <img [src]="logoPreview()!" alt="Preview" />
+              } @else if (logoUrl()) {
+                <img [src]="logoUrl()!" alt="Logo" />
+              } @else {
+                <div class="logo-placeholder">📷</div>
+              }
+            </div>
+            <div class="logo-actions">
+              <label class="btn btn--secondary" for="logo-input">
+                Subir imagen
+                <input id="logo-input" type="file" accept="image/jpeg,image/png,image/webp" (change)="onFileSelected($event)" hidden />
+              </label>
+              @if (logoFile()) {
+                <button class="btn btn--primary" [disabled]="logoStatus() === 'saving'" (click)="saveLogo()">
+                  @if (logoStatus() === 'saving') { <span class="btn-spinner"></span> } @else { Guardar logo }
+                </button>
+              }
+              @if (logoUrl() && !logoFile()) {
+                @if (!confirmDelete()) {
+                  <button class="btn btn--danger-outline" (click)="confirmDelete.set(true)">Eliminar logo</button>
+                } @else {
+                  <div class="confirm-inline">
+                    <span>¿Confirmar eliminación?</span>
+                    <button class="btn btn--danger" [disabled]="logoStatus() === 'saving'" (click)="deleteLogo()">Sí, eliminar</button>
+                    <button class="btn btn--ghost" (click)="confirmDelete.set(false)">Cancelar</button>
+                  </div>
+                }
+              }
+              @if (logoStatus() === 'success') { <span class="feedback feedback--ok">✓ Logo actualizado</span> }
+              @if (logoStatus() === 'error')   { <span class="feedback feedback--err">✗ Error al guardar</span> }
+            </div>
+          </div>
+          <p class="logo-hint">JPEG, PNG o WebP · Máx. 2MB</p>
+        </div>
+
+        <!-- Formulario general -->
+        <div class="settings-card">
+          <h2 class="settings-card__title">Datos de la empresa</h2>
+          <form [formGroup]="generalForm" (ngSubmit)="saveGeneral()" class="settings-form">
+            <div class="form-grid">
+
+              <div class="field-group">
+                <label class="field-group__label">Nombre</label>
+                <input class="field-group__input" formControlName="name" type="text" placeholder="Nombre" />
+              </div>
+
+              <div class="field-group">
+                <label class="field-group__label">Nombre comercial</label>
+                <input class="field-group__input" formControlName="commercial_name" type="text" placeholder="Nombre comercial" />
+              </div>
+
+              <div class="field-group">
+                <label class="field-group__label">Razón social</label>
+                <input class="field-group__input" formControlName="legal_name" type="text" placeholder="Razón social" />
+              </div>
+
+              <div class="field-group">
+                <label class="field-group__label">Correo electrónico</label>
+                <input class="field-group__input" formControlName="email" type="email" placeholder="correo@empresa.com" />
+              </div>
+
+              <div class="field-group">
+                <label class="field-group__label">Teléfono</label>
+                <input class="field-group__input" formControlName="phone" type="text" placeholder="Teléfono" />
+              </div>
+
+              <div class="field-group">
+                <label class="field-group__label">Dirección</label>
+                <input class="field-group__input" formControlName="address" type="text" placeholder="Dirección" />
+              </div>
+
+              <div class="field-group">
+                <label class="field-group__label">Barrio</label>
+                <input class="field-group__input" formControlName="neighboarhood" type="text" placeholder="Barrio" />
+              </div>
+
+              <div class="field-group">
+                <label class="field-group__label">Ciudad</label>
+                <select class="field-group__input" formControlName="city_id">
+                  <option [ngValue]="null">Seleccionar ciudad</option>
+                  @for (city of cities(); track city.id) {
+                    <option [ngValue]="city.id">{{ city.name }}</option>
+                  }
+                </select>
+              </div>
+
+            </div>
+
+            <div class="form-footer">
+              @if (generalStatus() === 'success') { <span class="feedback feedback--ok">✓ Cambios guardados</span> }
+              @if (generalStatus() === 'error')   { <span class="feedback feedback--err">✗ Error al guardar</span> }
+              <button class="btn btn--primary" type="submit" [disabled]="generalStatus() === 'saving'">
+                @if (generalStatus() === 'saving') { <span class="btn-spinner"></span> } @else { Guardar cambios }
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    }
+
+    <!-- TAB FISCAL -->
+    @if (activeTab() === 'fiscal') {
+      <div class="settings-content">
+        <div class="settings-card">
+          <h2 class="settings-card__title">Datos fiscales</h2>
+          <form [formGroup]="fiscalForm" (ngSubmit)="saveFiscal()" class="settings-form">
+            <div class="form-grid">
+
+              <div class="field-group">
+                <label class="field-group__label">NIT</label>
+                <input class="field-group__input" formControlName="tax_id" type="text" placeholder="900123456" />
+              </div>
+
+              <div class="field-group">
+                <label class="field-group__label">Código de verificación</label>
+                <input class="field-group__input" formControlName="verification_digit" type="text" placeholder="7" />
+              </div>
+
+              <div class="field-group">
+                <label class="field-group__label">Régimen</label>
+                <input class="field-group__input" formControlName="tax_regime" type="text" placeholder="Responsable de IVA" />
+              </div>
+
+              <div class="field-group field-group--full">
+                <label class="field-group__label">Dirección fiscal</label>
+                <input class="field-group__input" formControlName="fiscal_address" type="text" placeholder="Calle 1 # 2-3" />
+              </div>
+
+            </div>
+
+            <div class="form-footer">
+              @if (fiscalStatus() === 'success') { <span class="feedback feedback--ok">✓ Cambios guardados</span> }
+              @if (fiscalStatus() === 'error')   { <span class="feedback feedback--err">✗ Error al guardar</span> }
+              <div class="form-footer__actions">
+                <button class="btn btn--danger-outline" type="button" [disabled]="fiscalStatus() === 'saving'" (click)="deleteFiscal()">
+                  Eliminar datos fiscales
+                </button>
+                <button class="btn btn--primary" type="submit" [disabled]="fiscalStatus() === 'saving'">
+                  @if (fiscalStatus() === 'saving') { <span class="btn-spinner"></span> } @else { Guardar cambios }
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    }
+
+  }
+
+</div>

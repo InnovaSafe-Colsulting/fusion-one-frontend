@@ -1,0 +1,49 @@
+<header class="navbar">
+
+  <div class="navbar__left">
+    <button class="navbar__hamburger" (click)="toggleSidebar.emit()">☰</button>
+    <div class="navbar__title-group">
+      <h1 class="navbar__title">{{ pageTitle() }}</h1>
+      <p class="navbar__subtitle">{{ pageSubtitle() }}</p>
+    </div>
+  </div>
+
+  <div class="navbar__right">
+    <!-- Sucursal -->
+    <div class="navbar__branch">
+      <select class="navbar__select" [ngModel]="selectedBranch()" (ngModelChange)="selectedBranch.set($event)">
+        @for (b of branches(); track b.id) {
+          <option [value]="b.id">{{ b.name }}</option>
+        }
+        @if (branches().length === 0) {
+          <option disabled>Sin sucursales</option>
+        }
+      </select>
+    </div>
+
+    <!-- Fecha -->
+    <div class="navbar__date">
+      <span class="navbar__date-icon">📅</span>
+      <span>{{ today | date:'d MMM yyyy' }}</span>
+    </div>
+
+    <!-- Notificaciones -->
+    <button class="navbar__notif">
+      🔔
+      @if (notifications > 0) {
+        <span class="navbar__badge">{{ notifications }}</span>
+      }
+    </button>
+
+    <!-- Perfil -->
+    <div class="navbar__profile">
+      <div class="navbar__avatar">A</div>
+      <div class="navbar__profile-info">
+        <span class="navbar__profile-name">Administrador</span>
+        <span class="navbar__profile-email">admin&#64;fusionone.com</span>
+      </div>
+      <button class="navbar__logout" (click)="logout()" title="Cerrar sesión">⏻</button>
+    </div>
+  </div>
+
+</header>

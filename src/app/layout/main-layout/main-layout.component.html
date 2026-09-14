@@ -1,0 +1,22 @@
+<div class="layout">
+
+  <!-- Overlay mobile -->
+  @if (sidebarCollapsed()) {
+    <div class="layout__overlay" (click)="toggleSidebar()"></div>
+  }
+
+  <app-sidebar
+    [collapsed]="!sidebarCollapsed()"
+    (closeSidebar)="toggleSidebar()"
+  />
+
+  <div class="layout__main">
+    <app-navbar
+      (toggleSidebar)="toggleSidebar()"
+    />
+    <main class="layout__content">
+      <router-outlet />
+    </main>
+  </div>
+
+</div>

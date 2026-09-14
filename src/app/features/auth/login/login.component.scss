@@ -1,5 +1,5 @@
-@use '../../../../../styles/variables' as *;
-@use '../../../../../styles/mixins' as *;
+@use 'variables' as *;
+@use 'mixins' as *;
 
 .login-page {
   display: grid;
@@ -93,6 +93,7 @@
     color: $color-primary;
     text-decoration: none;
     font-size: $font-size-sm;
+    cursor: pointer;
     &:hover { text-decoration: underline; }
   }
 
@@ -150,7 +151,7 @@
 
   &__icon {
     padding: 0 $spacing-sm 0 $spacing-md;
-    color: $color-text-muted;
+    color: $color-primary;
     font-size: $font-size-base;
     flex-shrink: 0;
   }
@@ -185,9 +186,34 @@
   font-size: $font-size-sm;
 
   input[type='checkbox'] {
-    accent-color: $color-primary;
+    appearance: none;
+    -webkit-appearance: none;
     width: 16px;
     height: 16px;
+    border: 2px solid $color-border;
+    border-radius: $radius-sm;
+    background: $color-bg-overlay;
     cursor: pointer;
+    flex-shrink: 0;
+    transition: background $transition-fast, border-color $transition-fast;
+    position: relative;
+
+    &:checked {
+      background: $color-secondary;
+      border-color: $color-secondary;
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 3px;
+        top: 0px;
+        width: 5px;
+        height: 9px;
+        border: 2px solid #fff;
+        border-top: none;
+        border-left: none;
+        transform: rotate(45deg);
+      }
+    }
   }
 }

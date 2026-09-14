@@ -17,6 +17,7 @@ export class ApiService {
   }
 
   post<T>(path: string, body: unknown): Observable<T> {
+    console.log(`[API] POST ${this.base}/${path}`, body);
     return this.http.post<T>(`${this.base}/${path}`, body);
   }
 
@@ -30,5 +31,9 @@ export class ApiService {
 
   delete<T>(path: string): Observable<T> {
     return this.http.delete<T>(`${this.base}/${path}`);
+  }
+
+  postForm<T>(path: string, body: FormData): Observable<T> {
+    return this.http.post<T>(`${this.base}/${path}`, body);
   }
 }

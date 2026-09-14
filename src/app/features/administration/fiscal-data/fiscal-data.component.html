@@ -1,0 +1,71 @@
+<div class="company-page">
+
+  <!-- Header -->
+  <div class="company-page__header">
+    <div>
+      <h1 class="company-page__title">Datos fiscales</h1>
+      <p class="company-page__subtitle">Información tributaria registrada en el sistema</p>
+    </div>
+    <button class="btn-back" (click)="goBack()">← Volver al Dashboard</button>
+  </div>
+
+  @if (loading()) {
+    <div class="company-loading">
+      <span class="company-loading__spinner"></span>
+      <p>Cargando información...</p>
+    </div>
+  }
+
+  @if (!loading() && fiscalData()) {
+    <div class="company-layout company-layout--single">
+      <div class="company-card">
+        <h2 class="company-card__section-title">Información fiscal</h2>
+        <div class="company-fields">
+
+          <div class="field-group">
+            <label class="field-group__label">Nombre empresa</label>
+            <div class="field-group__input">{{ fiscalData()!.commercial_name }}</div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-group__label">NIT</label>
+            <div class="field-group__input">{{ fiscalData()!.tax_id }}</div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-group__label">Código de verificación</label>
+            <div class="field-group__input">{{ fiscalData()!.verification_digit }}</div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-group__label">Régimen</label>
+            <div class="field-group__input">{{ fiscalData()!.tax_regime }}</div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-group__label">Dirección fiscal</label>
+            <div class="field-group__input">{{ fiscalData()!.fiscal_address }}</div>
+          </div>
+
+        </div>
+
+        <div class="fiscal-actions">
+          <button class="btn-accept" (click)="goBack()">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Modal sin datos fiscales -->
+  @if (showEmptyModal()) {
+    <div class="modal-backdrop" (click)="goBack()">
+      <div class="modal-box" (click)="$event.stopPropagation()">
+        <p class="modal-box__icon">📋</p>
+        <h3 class="modal-box__title">Sin información fiscal</h3>
+        <p class="modal-box__message">No hay información fiscal asociada a esta empresa.</p>
+        <button class="btn-accept" (click)="goBack()">Aceptar</button>
+      </div>
+    </div>
+  }
+
+</div>

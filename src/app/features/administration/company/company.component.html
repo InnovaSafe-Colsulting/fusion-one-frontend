@@ -1,0 +1,96 @@
+<div class="company-page">
+
+  <!-- Header -->
+  <div class="company-page__header">
+    <div>
+      <h1 class="company-page__title">Información general</h1>
+      <p class="company-page__subtitle">Datos de la empresa registrada en el sistema</p>
+    </div>
+    <button class="btn-back" (click)="goBack()">← Volver al Dashboard</button>
+  </div>
+
+  @if (loading()) {
+    <div class="company-loading">
+      <span class="company-loading__spinner"></span>
+      <p>Cargando información...</p>
+    </div>
+  } @else if (!companyData()) {
+    <div class="company-empty">
+      <p>No se pudo cargar la información de la empresa.</p>
+    </div>
+  } @else {
+
+    <div class="company-layout">
+
+      <!-- Logo / Avatar -->
+      <div class="company-card company-card--logo">
+        @if (companyData()!.tenant.logo) {
+          <img class="company-logo" [src]="companyData()!.tenant.logo!" [alt]="companyData()!.tenant.name" />
+        } @else {
+          <div class="company-avatar">{{ initials() }}</div>
+        }
+        <p class="company-card__name">{{ companyData()!.tenant.commercial_name }}</p>
+        <p class="company-card__taxid">{{ companyData()!.tenant.legal_name }}</p>
+      </div>
+
+      <!-- Datos empresa -->
+      <div class="company-card company-card--info">
+        <h2 class="company-card__section-title">Datos de la empresa</h2>
+        <div class="company-fields">
+
+          <div class="field-group">
+            <label class="field-group__label">Nombre comercial</label>
+            <div class="field-group__input">{{ companyData()!.tenant.commercial_name }}</div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-group__label">Razón social</label>
+            <div class="field-group__input">{{ companyData()!.tenant.legal_name }}</div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-group__label">Dirección</label>
+            <div class="field-group__input">{{ companyData()!.tenant.address }}, {{ companyData()!.tenant.neighboarhood }}</div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-group__label">Teléfono</label>
+            <div class="field-group__input">{{ companyData()!.tenant.phone }}</div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-group__label">Correo electrónico</label>
+            <div class="field-group__input">{{ companyData()!.tenant.email }}</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Datos contacto -->
+      <div class="company-card company-card--contact">
+        <h2 class="company-card__section-title">Persona de contacto</h2>
+        <div class="company-fields">
+
+          <div class="field-group">
+            <label class="field-group__label">Nombre completo</label>
+            <div class="field-group__input">{{ companyData()!.user.first_name }} {{ companyData()!.user.last_name }}</div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-group__label">Correo electrónico</label>
+            <div class="field-group__input">{{ companyData()!.user.email }}</div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-group__label">Celular</label>
+            <div class="field-group__input">{{ companyData()!.user.cellphone }}</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  }
+
+</div>

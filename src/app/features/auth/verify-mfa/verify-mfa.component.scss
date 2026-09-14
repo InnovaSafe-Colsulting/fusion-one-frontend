@@ -16,10 +16,17 @@
   align-items: center;
   gap: $spacing-md;
 
+  @include respond-to('sm') {
+    max-width: 100%;
+    gap: $spacing-sm;
+  }
+
   &__logo {
     width: calc(100% - 4cm);
     height: auto;
     object-fit: contain;
+
+    @include respond-to('sm') { width: 100px; }
   }
 
   &__title {
@@ -27,6 +34,8 @@
     font-weight: 700;
     color: $color-text-primary;
     text-align: center;
+
+    @include respond-to('sm') { font-size: $font-size-lg; }
   }
 
   &__subtitle {
@@ -34,6 +43,8 @@
     color: $color-text-secondary;
     text-align: center;
     margin-top: -$spacing-sm;
+
+    @include respond-to('sm') { font-size: $font-size-sm; }
   }
 
   &__status {
@@ -47,6 +58,8 @@
   gap: $spacing-sm;
   justify-content: center;
   margin-top: $spacing-sm;
+
+  @include respond-to('sm') { gap: $spacing-xs; }
 }
 
 .otp-input {
@@ -72,10 +85,45 @@
     color: $color-primary;
   }
 
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
   @include respond-to('sm') {
     width: 42px;
     height: 52px;
     font-size: $font-size-lg;
+  }
+}
+
+// Reenvío
+.resend {
+  text-align: center;
+  margin-top: $spacing-xs;
+
+  &__countdown {
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+
+    span {
+      color: $color-primary;
+      font-weight: 600;
+    }
+  }
+
+  &__btn {
+    background: none;
+    border: none;
+    color: $color-primary;
+    font-size: $font-size-sm;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+    transition: color $transition-fast;
+
+    &:hover:not(:disabled) { color: $color-primary-hover; }
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
   }
 }
 

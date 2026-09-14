@@ -44,7 +44,19 @@ export class AuthService {
   }
 
   sendMfaEmail(email: string) {
-    return this.api.post<void>('auth/mfa/send', { email });
+    return this.api.post<void>('auth/mfa/send-email', { email });
+  }
+
+  sendMfaWhatsapp(phone: string) {
+    return this.api.post<void>('auth/mfa/send-whatsapp', { phone });
+  }
+
+  forgotPassword(email: string) {
+    return this.api.post<void>('auth/forgot-password', { email });
+  }
+
+  resetPassword(data: { email: string; token: string; password: string; password_confirmation: string }) {
+    return this.api.post<void>('auth/reset-password', data);
   }
 
   logout(): void {

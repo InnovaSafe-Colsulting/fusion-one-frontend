@@ -6,11 +6,9 @@ import { environment } from '../../../../environments/environment';
 export const tenantInterceptor: HttpInterceptorFn = (req, next) => {
   const tenantId = inject(TenantService).getTenantId();
 
-  const cloned = req.clone({
-    setHeaders: {
-      [environment.tenantHeader]: tenantId ?? '',
-    },
-  });
+  if (!tenantId) return next(req);
 
-  return next(cloned);
+  return next(req.clone({
+    setHeaders: { [environment.tenantHeader]: tenantId },
+  }));
 };

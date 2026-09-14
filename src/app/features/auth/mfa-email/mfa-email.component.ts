@@ -20,10 +20,10 @@ export class MfaEmailComponent {
   loading = signal(false);
 
   form = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
+    contact: ['', [Validators.required, Validators.email]],
   });
 
-  get email() { return this.form.get('email'); }
+  get contact() { return this.form.get('contact'); }
 
   onSubmit(): void {
     if (this.form.invalid) {
@@ -31,10 +31,12 @@ export class MfaEmailComponent {
       return;
     }
     this.loading.set(true);
-    this.authService.sendMfaEmail(this.email?.value ?? '').subscribe({
+    this.authService.sendMfaEmail(this.contact?.value ?? '').subscribe({
       next: () => {
         this.loading.set(false);
-        this.router.navigate(['/auth/verify-mfa']);
+        this.router.navigate(['/auth/verify-mfa'], {
+          state: { email: this.contact?.value }
+        });
       },
       error: () => {
         this.loading.set(false);

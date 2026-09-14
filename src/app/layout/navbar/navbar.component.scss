@@ -1,0 +1,166 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.navbar {
+  height: 64px;
+  background: #000;
+  border-bottom: 1px solid $color-border;
+  @include flex-between;
+  padding: 0 $spacing-lg;
+  gap: $spacing-md;
+  flex-shrink: 0;
+
+  @include respond-to('md') {
+    padding: 0 $spacing-md;
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    min-width: 0;
+  }
+
+  &__hamburger {
+    background: none;
+    border: none;
+    color: $color-primary;
+    font-size: $font-size-lg;
+    cursor: pointer;
+    padding: $spacing-xs;
+    flex-shrink: 0;
+    display: none;
+
+    @include respond-to('lg') { display: block; }
+  }
+
+  &__title-group {
+    min-width: 0;
+  }
+
+  &__title {
+    font-size: $font-size-lg;
+    font-weight: 700;
+    color: $color-primary;
+    line-height: 1.2;
+
+    @include respond-to('sm') { font-size: $font-size-md; }
+  }
+
+  &__subtitle {
+    font-size: $font-size-sm;
+    color: rgba($color-primary, 0.7);
+    @include truncate;
+
+    @include respond-to('md') { display: none; }
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    flex-shrink: 0;
+
+    @include respond-to('sm') { gap: $spacing-sm; }
+  }
+
+  &__branch {
+    @include respond-to('md') { display: none; }
+  }
+
+  &__select {
+    background: $color-bg-overlay;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    color: $color-primary;
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-sm;
+    cursor: pointer;
+
+    &:focus { outline: none; border-color: $color-primary; }
+  }
+
+  &__date {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-size: $font-size-sm;
+    color: $color-primary;
+
+    @include respond-to('md') { display: none; }
+  }
+
+  &__notif {
+    position: relative;
+    background: none;
+    border: none;
+    font-size: $font-size-lg;
+    cursor: pointer;
+    padding: $spacing-xs;
+    color: $color-primary;
+  }
+
+  &__badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: $color-error;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    width: 16px;
+    height: 16px;
+    border-radius: $radius-full;
+    @include flex-center;
+  }
+
+  &__profile {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+
+    @include respond-to('sm') { gap: $spacing-xs; }
+  }
+
+  &__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: $radius-full;
+    background: $color-primary;
+    color: #000;
+    font-weight: 700;
+    font-size: $font-size-base;
+    @include flex-center;
+    flex-shrink: 0;
+  }
+
+  &__profile-info {
+    display: flex;
+    flex-direction: column;
+
+    @include respond-to('md') { display: none; }
+  }
+
+  &__profile-name {
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: $color-primary;
+  }
+
+  &__profile-email {
+    font-size: 11px;
+    color: rgba($color-primary, 0.7);
+  }
+
+  &__logout {
+    background: none;
+    border: none;
+    color: $color-primary;
+    font-size: $font-size-md;
+    cursor: pointer;
+    padding: $spacing-xs;
+    transition: color $transition-fast;
+
+    &:hover { color: $color-error; }
+  }
+}

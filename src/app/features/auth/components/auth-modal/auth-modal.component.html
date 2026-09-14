@@ -1,0 +1,47 @@
+@if (authModal.isOpen()) {
+  <div class="modal-backdrop" (click)="onBackdropClick($event)">
+    <div class="modal">
+
+      <div class="modal__header">
+        @switch (authModal.type()) {
+          @case ('forgot-password') { <h2 class="modal__title">¿Olvidaste tu contraseña?</h2> }
+        }
+        <button class="modal__close" (click)="authModal.close()">✕</button>
+      </div>
+
+      <div class="modal__body">
+        @switch (authModal.type()) {
+          @case ('forgot-password') {
+            <p class="modal__description">
+              Ingresa tu correo y te enviaremos un enlace para restablecerla.
+            </p>
+            <form [formGroup]="forgotForm" (ngSubmit)="onForgotSubmit()" novalidate>
+              <div class="form-group" [class.form-group--error]="email?.invalid && email?.touched">
+                <div class="input-wrapper">
+                  <span class="input-wrapper__icon">✉</span>
+                  <input
+                    class="input-field"
+                    type="email"
+                    formControlName="email"
+                    placeholder="Correo electrónico"
+                    autocomplete="email"
+                  />
+                </div>
+                @if (email?.invalid && email?.touched) {
+                  <span class="form-group__error">Ingresa un correo válido</span>
+                }
+              </div>
+              <div class="modal__actions">
+                <button type="button" class="btn btn-ghost" (click)="authModal.close()">Cancelar</button>
+                <button type="submit" class="btn btn-primary" [disabled]="loading()">
+                  @if (loading()) { Enviando... } @else { ENVIAR ENLACE }
+                </button>
+              </div>
+            </form>
+          }
+        }
+      </div>
+
+    </div>
+  </div>
+}

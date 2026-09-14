@@ -13,6 +13,7 @@
           maxlength="1"
           [value]="digit"
           [class.otp-input--filled]="digit"
+          [disabled]="verifying() || verified()"
           (input)="onInput($index, $event)"
           (keydown)="onKeydown($index, $event)"
           (blur)="onBlur()"
@@ -23,9 +24,24 @@
     @if (verifying()) {
       <p class="auth-card__status">Verificando...</p>
     }
+
+    <div class="resend">
+      @if (countdown() > 0) {
+        <p class="resend__countdown">
+          Reenviar código en <span>{{ countdown() }}s</span>
+        </p>
+      } @else {
+        <button
+          class="resend__btn"
+          [disabled]="resending()"
+          (click)="resendCode()"
+        >
+          {{ resending() ? 'Reenviando...' : '¿No recibiste el código? Reenviar' }}
+        </button>
+      }
+    </div>
   </div>
 
-  <!-- Modal éxito -->
   @if (verified()) {
     <div class="modal-backdrop">
       <div class="success-modal">

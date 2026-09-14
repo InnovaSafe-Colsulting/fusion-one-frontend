@@ -1,0 +1,77 @@
+<aside class="sidebar" [class.sidebar--collapsed]="collapsed()">
+
+  <!-- Header logos -->
+  <div class="sidebar__header">
+    <img src="images/fusionOneIcon-Photoroom.png" alt="FusionOne" class="sidebar__logo-main" />
+    <div class="sidebar__brand">
+      <img src="images/innovaSafe.png" alt="InnovaSafe" class="sidebar__logo-brand" />
+      <span class="sidebar__brand-name">InnovaSafe Consulting</span>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sidebar__nav">
+    @for (item of navItems(); track item.id) {
+
+      @if (!hasChildren(item)) {
+        <a
+          class="nav-item"
+          [class.nav-item--active]="isActive(item.slug)"
+          [routerLink]="getRoute(item.slug)"
+          (click)="selectSlug(item.slug)"
+        >
+          <span class="nav-item__icon">{{ getIcon(item.slug) }}</span>
+          <span class="nav-item__label">{{ item.name }}</span>
+        </a>
+      } @else {
+        <div class="nav-item" [class.nav-item--expanded]="expandedItem() === item.id" (click)="toggleItem(item.id)">
+          <span class="nav-item__icon">{{ getIcon(item.slug) }}</span>
+          <span class="nav-item__label">{{ item.name }}</span>
+          <span class="nav-item__arrow">{{ expandedItem() === item.id ? '▾' : '›' }}</span>
+        </div>
+
+        @if (expandedItem() === item.id) {
+          <div class="nav-submenu">
+            @for (child of item.children; track child.id) {
+
+              @if (!hasChildren(child)) {
+                <a
+                  class="nav-submenu__item"
+                  [class.nav-submenu__item--active]="isActive(child.slug)"
+                  [routerLink]="getRoute(child.slug)"
+                  (click)="selectSlug(child.slug)"
+                >
+                  {{ child.name }}
+                </a>
+              } @else {
+                <div class="nav-submenu__group">
+                  <span class="nav-submenu__group-label">{{ child.name }}</span>
+                  @for (sub of child.children; track sub.id) {
+                    <a
+                      class="nav-submenu__item nav-submenu__item--nested"
+                      [class.nav-submenu__item--active]="isActive(sub.slug)"
+                      [routerLink]="getRoute(sub.slug)"
+                      (click)="selectSlug(sub.slug)"
+                    >
+                      {{ sub.name }}
+                    </a>
+                  }
+                </div>
+              }
+
+            }
+          </div>
+        }
+      }
+
+    }
+  </nav>
+
+  <!-- Footer -->
+  <div class="sidebar__footer">
+    <p>© 2026 InnovaSafe Consulting</p>
+    <p>FusionOne POS</p>
+    <p>Todos los derechos reservados.</p>
+  </div>
+
+</aside>
